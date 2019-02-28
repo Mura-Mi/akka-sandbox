@@ -28,7 +28,7 @@ trait RequestTimeout {
   import scala.concurrent.duration._
 
   def requestTimeout(): Timeout = {
-    val d = Duration("20s")
+    val d = Duration("3s")
     FiniteDuration(d.length, d.unit)
   }
 }

@@ -7,6 +7,7 @@ import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.util.Timeout
 import yokohama.murataku.akka_sanbox.model.game.Game
+import yokohama.murataku.akka_sanbox.model.game.Game.Result
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 
@@ -41,6 +42,14 @@ trait RestRoutes extends GameApi with ModelMarshalling {
           maybe.fold(complete(NotFound))(e => complete(e))
         }
       }
+    } ~ pathPrefix("strikeout") {
+      pathEndOrSingleSlash {
+        post {
+          onSuccess(incrementOutCount()) { result =>
+            complete(result)
+          }
+        }
+      }
     }
   }
 }
@@ -53,5 +62,7 @@ trait GameApi {
   def initGame(): ActorRef
 
   def showGame(): Future[Option[Game.GameOutline]] = game.ask(Game.ShowGame).mapTo[Option[Game.GameOutline]]
+
+  def incrementOutCount(): Future[Result] = game.ask(Game.HitterOut).mapTo[Result]
 }
 

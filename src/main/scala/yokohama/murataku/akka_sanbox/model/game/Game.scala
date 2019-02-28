@@ -11,7 +11,12 @@ class Game(implicit timeout: Timeout) extends Actor {
   //noinspection TypeAnnotation
   def receive = {
     case HitterOut =>
-      outCount = (outCount + 1) % 3
+      outCount += 1
+      if (outCount >= 3) {
+        outCount = 0
+        sender() ! NextInning
+      } else
+        sender() ! InningContinue
     case ShowGame => sender() ! Some(GameOutline(outCount))
   }
 
@@ -27,4 +32,9 @@ object Game {
 
   case object ShowGame
 
+  case class Result(value: String)
+
+  val NextInning = Result("next inning")
+
+  val InningContinue = Result("continues")
 }

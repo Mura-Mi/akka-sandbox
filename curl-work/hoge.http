@@ -11,3 +11,7 @@
 GET http://localhost:5000/game
 Accept: application/json
 ###
+
+POST http://localhost:5000/game/strikeout
+
+###
