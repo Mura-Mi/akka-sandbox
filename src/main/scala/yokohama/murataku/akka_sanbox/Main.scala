@@ -6,6 +6,7 @@ import akka.http.scaladsl.Http.ServerBinding
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -21,6 +22,8 @@ object Main extends App with RequestTimeout {
   implicit val materialier: ActorMaterializer = ActorMaterializer()
 
   val bindingFuture: Future[ServerBinding] = Http().bindAndHandle(api, host, port)
+
+  LoggerFactory.getLogger(getClass).info("startup completed")
 }
 
 trait RequestTimeout {
